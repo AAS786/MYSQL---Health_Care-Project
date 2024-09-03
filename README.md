@@ -1,6 +1,7 @@
 # MYSQL---Health_Care-Project
 
-![Uploading Screenshot 2024-09-03 101522.png…]()
+![Project Logo](C:\Users\dell\Downloads/Screenshot 2024-09-03 101522.png)
+
 
 
 **Project Overview**
