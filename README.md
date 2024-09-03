@@ -1,6 +1,6 @@
 # MYSQL---Health_Care-Project
 
-![Project Logo](C:\Users\dell\Downloads/Screenshot 2024-09-03 101522.png)
+<img src="images/health_care.png" alt="Project Logo" width="200"/>
 
 
 
