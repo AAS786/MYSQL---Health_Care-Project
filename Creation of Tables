@@ -1,1 +1,87 @@
+CREATE DATABASE HEALTH_CARE;
+USE HEALTH_CARE;
 
+-- Create Patients Table
+CREATE TABLE Patients (
+    PatientID INT PRIMARY KEY AUTO_INCREMENT  ,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    DOB DATE,
+    Gender NVARCHAR(10),
+    ContactNumber NVARCHAR(15),
+    Address NVARCHAR(255),
+    Status NVARCHAR(50)
+);
+
+-- Create Doctors Table
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Specialty NVARCHAR(50),
+    ContactNumber NVARCHAR(15),
+    Email NVARCHAR(100)
+);
+
+-- Create Appointments Table
+CREATE TABLE Appointments (
+    AppointmentID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    DoctorID INT,
+    AppointmentDate DATETIME,
+    Status NVARCHAR(50),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+-- Create MedicalRecords Table
+CREATE TABLE MedicalRecords (
+    RecordID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    DoctorID INT,
+    Diagnosis NVARCHAR(255),
+    Treatment NVARCHAR(255),
+    RecordDate DATETIME,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+-- Create Prescriptions Table
+CREATE TABLE Prescriptions (
+    PrescriptionID INT PRIMARY KEY AUTO_INCREMENT ,
+    RecordID INT,
+    Medication NVARCHAR(255),
+    Dosage NVARCHAR(50),
+    StartDate DATE,
+    EndDate DATE,
+    FOREIGN KEY (RecordID) REFERENCES MedicalRecords(RecordID)
+);
+
+-- Create Billing Table
+CREATE TABLE Billing (
+    BillingID INT PRIMARY KEY AUTO_INCREMENT ,
+    PatientID INT,
+    Amount DECIMAL(10, 2),
+    BillingDate DATE,
+    PaymentStatus NVARCHAR(50),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
+);
+
+-- Create Departments Table
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY AUTO_INCREMENT ,
+    DepartmentName NVARCHAR(50),
+    HeadDoctorID INT,
+    FOREIGN KEY (HeadDoctorID) REFERENCES Doctors(DoctorID)
+);
+
+-- Create HospitalStaff Table
+CREATE TABLE HospitalStaff (
+    StaffID INT PRIMARY KEY AUTO_INCREMENT ,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Position NVARCHAR(50),
+    DepartmentID INT,
+    ContactNumber NVARCHAR(15),
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
