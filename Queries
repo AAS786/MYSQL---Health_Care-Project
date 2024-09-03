@@ -1,23 +1,4 @@
-SELECT * FROM Patients ;
-SELECT * FROM Doctors ;
-SELECT * FROM Appointments ;
-SELECT * FROM MedicalRecords ;
-SELECT * FROM Prescriptions ;
-SELECT * FROM Billing ;
-SELECT * FROM Departments ;
-SELECT * FROM HospitalStaff ;
 
-DESC Patients ;
-DESC Doctors ;
-DESC Appointments ;
-DESC MedicalRecords ;
-DESC Prescriptions ;
-DESC Billing ;
-DESC Departments ;
-DESC HospitalStaff ;
-
-
---
 --- updates the contact number of the patient with PatientID = 1.
 UPDATE Patients
 SET ContactNumber = '9876543225'
