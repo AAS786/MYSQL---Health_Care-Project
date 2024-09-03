@@ -1,6 +1,6 @@
 # MYSQL---Health_Care-Project
 
-<img src="images/health_care.png" alt="Project Logo" width="200"/>
+![Project Logo](images/health_care.png)
 
 
 
