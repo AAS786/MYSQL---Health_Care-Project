@@ -10,12 +10,25 @@ FROM Billing
 WHERE PatientID = 1
 GROUP BY PatientID;
 
++-----------+-------------+
+| PatientID | TotalAmount |
++-----------+-------------+
+|         1 |     1500.00 |
++-----------+-------------+
+
 --- Find doctors who have seen more than 2 patients.
 SELECT D.FirstName, D.LastName, COUNT(A.PatientID) AS NumberOfPatients
 FROM Doctors D
 JOIN Appointments A ON D.DoctorID = A.DoctorID
 GROUP BY D.DoctorID
 HAVING COUNT(A.PatientID) > 2;
+
++-----------+----------+------------------+
+| FirstName | LastName | NumberOfPatients |
++-----------+----------+------------------+
+| Dr. Ravi  | Patel    |                3 |
+| Dr. Anil  | Joshi    |                3 |
++-----------+----------+------------------+
 
 --- Find the names of patients who have appointments with specific doctors.
 SELECT FirstName, LastName
@@ -26,6 +39,19 @@ WHERE PatientID IN (
     WHERE DoctorID IN (1, 2, 3)
 );
 
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Arjun     | Verma    |
+| Neha      | Sharma   |
+| Rohan     | Singh    |
+| Sneha     | Patel    |
+| Vikram    | Joshi    |
+| Pooja     | Rao      |
+| Rahul     | Nair     |
+| Anita     | Desai    |
++-----------+----------+
+
 --- the status of the appointment with AppointmentID = 2 to 'PENDING'.
 UPDATE Appointments
 SET Status = 'PENDING'
@@ -35,17 +61,43 @@ WHERE AppointmentID = 2;
 SELECT * FROM Doctors
 WHERE Specialty = 'Cardiology';
 
++----------+-----------+----------+------------+---------------+------------------------+
+| DoctorID | FirstName | LastName | Specialty  | ContactNumber | Email                  |
++----------+-----------+----------+------------+---------------+------------------------+
+|        1 | Dr. Ravi  | Patel    | Cardiology | 9876543215    | ravi.patel@example.com |
++----------+-----------+----------+------------+---------------+------------------------+
+
 --- query retrieves all patients whose last names start with the letter 'S'.
 SELECT * FROM Patients
 WHERE LastName LIKE 'S%';
+
++-----------+-----------+----------+------------+--------+---------------+----------------------+--------+
+| PatientID | FirstName | LastName | DOB        | Gender | ContactNumber | Address              | Status |
++-----------+-----------+----------+------------+--------+---------------+----------------------+--------+
+|         2 | Neha      | Sharma   | 1990-07-23 | Female | 9876543211    | Delhi, Delhi         | Active |
+|         3 | Rohan     | Singh    | 1982-01-30 | Male   | 9876543212    | Bangalore, Karnataka | Active |
++-----------+-----------+----------+------------+--------+---------------+----------------------+--------+
 
 --- query selects all appointments scheduled between August 1st and August 10th, 2024.
 SELECT * FROM Appointments
 WHERE AppointmentDate BETWEEN '2024-08-01 00:00:00' AND '2024-08-10 23:59:59';
 
++---------------+-----------+----------+---------------------+-----------+
+| AppointmentID | PatientID | DoctorID | AppointmentDate     | Status    |
++---------------+-----------+----------+---------------------+-----------+
+|             6 |         6 |        1 | 2024-08-01 10:30:00 | Completed |
+|             7 |         7 |        1 | 2024-08-06 11:30:00 | Completed |
++---------------+-----------+----------+---------------------+-----------+
+
 --- query retrieves all medical records where the diagnosis includes the word "Flu".
 SELECT * FROM MedicalRecords
 WHERE Diagnosis LIKE '%Flu%';
+
++----------+-----------+----------+-----------+------------+---------------------+
+| RecordID | PatientID | DoctorID | Diagnosis | Treatment  | RecordDate          |
++----------+-----------+----------+-----------+------------+---------------------+
+|        4 |         4 |        4 | Flu       | Medication | 2024-07-15 09:00:00 |
++----------+-----------+----------+-----------+------------+---------------------+
 
 --- query updates the contact number and email of the doctor with DoctorID = 5
 UPDATE Doctors
@@ -56,10 +108,24 @@ WHERE DoctorID = 5;
 SELECT * FROM HospitalStaff
 WHERE DepartmentID = 3;
 
++---------+-----------+----------+----------+--------------+---------------+
+| StaffID | FirstName | LastName | Position | DepartmentID | ContactNumber |
++---------+-----------+----------+----------+--------------+---------------+
+|       3 | Arvind    | Nair     | Surgeon  |            3 | 9876543222    |
++---------+-----------+----------+----------+--------------+---------------+
+
 --- retrieves the 3 most recent appointments by ordering the Appointments IN desc
 SELECT * FROM Appointments
 ORDER BY AppointmentDate DESC
 LIMIT 3;
+
++---------------+-----------+----------+---------------------+---------+
+| AppointmentID | PatientID | DoctorID | AppointmentDate     | Status  |
++---------------+-----------+----------+---------------------+---------+
+|            10 |        10 |        3 | 2024-08-21 14:30:00 | Pending |
+|             9 |         9 |        3 | 2024-08-16 09:30:00 | Pending |
+|             8 |         8 |        2 | 2024-08-11 12:30:00 | Pending |
++---------------+-----------+----------+---------------------+---------+
 
 --- Retrieve the names of patients who have had appointments with a doctor specializing in "Cardiology."
 SELECT FirstName, LastName FROM Patients
@@ -69,6 +135,14 @@ WHERE PatientID IN (
         WHERE Specialty = 'Cardiology'
     )
 );
+
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Arjun     | Verma    |
+| Sneha     | Patel    |
+| Vikram    | Joshi    |
++-----------+----------+
 
 --- Retrieve the PatientID and FirstName of patients who have a pending appointment and 
 ---- are under the care of the head doctor of the "Neurology" department.
@@ -85,29 +159,79 @@ WHERE PatientID IN (
     )
 );
 
++-----------+-----------+
+| PatientID | FirstName |
++-----------+-----------+
+|         2 | Neha      |
+|         8 | Pooja     |
++-----------+-----------+
 
 
 -- Select Statement: --
 --- Select All Columns from a Table
 SELECT FirstName, LastName FROM Doctors;
 
---- Select Specific Columns from a Table
-SELECT FirstName, LastName FROM Doctors;
++------------+----------+
+| FirstName  | LastName |
++------------+----------+
+| Dr. Ravi   | Patel    |
+| Dr. Sunita | Desai    |
+| Dr. Anil   | Joshi    |
+| Dr. Meera  | Rao      |
+| Dr. Vikram | Kapoor   |
++------------+----------+
 
 -- Where Clauses: --
 --- Filter ALL Records Using WHERE Clause
 SELECT * FROM Patients WHERE Gender = 'Female';
 
++-----------+-----------+----------+------------+--------+---------------+----------------------+----------+
+| PatientID | FirstName | LastName | DOB        | Gender | ContactNumber | Address              | Status   |
++-----------+-----------+----------+------------+--------+---------------+----------------------+----------+
+|         2 | Neha      | Sharma   | 1990-07-23 | Female | 9876543211    | Delhi, Delhi         | Active   |
+|         4 | Priya     | Mehta    | 1995-09-15 | Female | 9876543213    | Chennai, Tamil Nadu  | InActive |
+|         6 | Sneha     | Patel    | 1991-12-11 | Female | 9876543215    | Ahmedabad, Gujarat   | Active   |
+|         8 | Pooja     | Rao      | 1993-11-30 | Female | 9876543217    | Hyderabad, Telangana | Active   |
+|        10 | Anita     | Desai    | 1992-10-05 | Female | 9876543219    | Jaipur, Rajasthan    | Active   |
++-----------+-----------+----------+------------+--------+---------------+----------------------+----------+
+
 --- Filter Specific Columns Using WHERE Clause
 SELECT FirstName, LastName FROM Doctors WHERE FirstName ='DR. Ravi';
+
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Dr. Ravi  | Patel    |
++-----------+----------+
 
 -- Order By : --
 -- Sorts the result set in ascending or descending order. ASC FOR Ascending Order & DESC For Descending Order --
 SELECT * FROM Patients ORDER BY LastName ASC;
 
++-----------+-----------+----------+------------+--------+---------------+----------------------------+----------+
+| PatientID | FirstName | LastName | DOB        | Gender | ContactNumber | Address                    | Status   |
++-----------+-----------+----------+------------+--------+---------------+----------------------------+----------+
+|        10 | Anita     | Desai    | 1992-10-05 | Female | 9876543219    | Jaipur, Rajasthan          | Active   |
+|         7 | Vikram    | Joshi    | 1984-08-25 | Male   | 9876543216    | Kolkata, West Bengal       | Active   |
+|         5 | Amit      | Kumar    | 1987-05-20 | Male   | 9876543214    | Pune, Maharashtra          | Active   |
+|         4 | Priya     | Mehta    | 1995-09-15 | Female | 9876543213    | Chennai, Tamil Nadu        | InActive |
+|         9 | Rahul     | Nair     | 1988-03-22 | Male   | 9876543218    | Thiruvananthapuram, Kerala | Active   |
+|         6 | Sneha     | Patel    | 1991-12-11 | Female | 9876543215    | Ahmedabad, Gujarat         | Active   |
+|         8 | Pooja     | Rao      | 1993-11-30 | Female | 9876543217    | Hyderabad, Telangana       | Active   |
+|         2 | Neha      | Sharma   | 1990-07-23 | Female | 9876543211    | Delhi, Delhi               | Active   |
+|         3 | Rohan     | Singh    | 1982-01-30 | Male   | 9876543212    | Bangalore, Karnataka       | Active   |
+|         1 | Arjun     | Verma    | 1985-04-12 | Male   | 9876543225    | Mumbai, Maharashtra        | Active   |
++-----------+-----------+----------+------------+--------+---------------+----------------------------+----------+
+
 -- Count Function : --
 --- Returns the number of rows that match a specified condition. Count(*) || Count(Column_Name)  || Count(1/2..) 
 SELECT COUNT(*) FROM Appointments;
+
++----------+
+| COUNT(*) |
++----------+
+|       10 |
++----------+
 
 -- Aggregate Functions:  SUM, AVG, MIN, MAX --
 --- Sum():Returns the sum of a numeric column.
@@ -119,17 +243,43 @@ SELECT Avg(Amount) AS AvgBilling FROM Billing;
 SELECT Max(Amount) AS HighestBilling FROM Billing;
 SELECT Min(Amount) AS LowestBilling FROM Billing;
 
++--------------+
+| TotalBilling |
++--------------+
+|     10800.00 |
++--------------+
++-------------+
+| AvgBilling  |
++-------------+
+| 1542.857143 |
++-------------+
++----------------+
+| HighestBilling |
++----------------+
+|        2200.00 |
++----------------+
++---------------+
+| LowestBilling |
++---------------+
+|        500.00 |
++---------------+
+
 -- Subqueries :--
 -- Question: Retrieve doctors who have appointments scheduled after '2023-01-01'
 SELECT FirstName, LastName FROM Doctors
 WHERE DoctorID IN (SELECT DoctorID FROM Appointments WHERE AppointmentDate > '2023-01-01');
 
++------------+----------+
+| FirstName  | LastName |
++------------+----------+
+| Dr. Ravi   | Patel    |
+| Dr. Sunita | Desai    |
+| Dr. Anil   | Joshi    |
+| Dr. Meera  | Rao      |
+| Dr. Vikram | Kapoor   |
++------------+----------+
+
 -- Joins : --
---- Question: Retrieve patients who have never had an appointment. names for all appointments.
-SELECT P.FirstName, P.LastName
-FROM Patients P
-LEFT JOIN Appointments A ON P.PatientID = A.PatientID
-WHERE A.AppointmentDate IS NULL;
 
 --- Question: Retrieve patients' names along with their doctors' names for all appointments.
 SELECT P.FirstName AS PatientFirstName, P.LastName AS PatientLastName, D.FirstName AS DoctorFirstName, D.LastName AS DoctorLastName
@@ -137,18 +287,34 @@ FROM Appointments A
 INNER JOIN Patients P ON A.PatientID = P.PatientID
 INNER JOIN Doctors D ON A.DoctorID = D.DoctorID;
 
++------------------+-----------------+-----------------+----------------+
+| PatientFirstName | PatientLastName | DoctorFirstName | DoctorLastName |
++------------------+-----------------+-----------------+----------------+
+| Arjun            | Verma           | Dr. Ravi        | Patel          |
+| Sneha            | Patel           | Dr. Ravi        | Patel          |
+| Vikram           | Joshi           | Dr. Ravi        | Patel          |
+| Neha             | Sharma          | Dr. Sunita      | Desai          |
+| Pooja            | Rao             | Dr. Sunita      | Desai          |
+| Rohan            | Singh           | Dr. Anil        | Joshi          |
+| Rahul            | Nair            | Dr. Anil        | Joshi          |
+| Anita            | Desai           | Dr. Anil        | Joshi          |
+| Priya            | Mehta           | Dr. Meera       | Rao            |
+| Amit             | Kumar           | Dr. Vikram      | Kapoor         |
++------------------+-----------------+-----------------+----------------+
+
 --  GROUP BY: -- 
 --- Question: Count the number of patients by gender.
 SELECT Gender, COUNT(*) AS NumberOfPatients
 FROM Patients
 GROUP BY Gender;
 
--- HAVING Clause :--
---- Question: Retrieve doctors who have more than 10 appointments.
-SELECT DoctorID, COUNT(*) AS AppointmentCount
-FROM Appointments
-GROUP BY DoctorID
-HAVING COUNT(*) > 10;
++--------+------------------+
+| Gender | NumberOfPatients |
++--------+------------------+
+| Male   |                5 |
+| Female |                5 |
++--------+------------------+
+
 
 -- Union / Union All Operator : --
 --- Question: Retrieve names from both the Doctors and Patients tables.
@@ -156,15 +322,40 @@ SELECT FirstName, LastName FROM Doctors
 UNION
 SELECT FirstName, LastName FROM Patients;
 
++------------+----------+
+| FirstName  | LastName |
++------------+----------+
+| Dr. Ravi   | Patel    |
+| Dr. Sunita | Desai    |
+| Dr. Anil   | Joshi    |
+| Dr. Meera  | Rao      |
+| Dr. Vikram | Kapoor   |
+| Arjun      | Verma    |
+| Neha       | Sharma   |
+| Rohan      | Singh    |
+| Priya      | Mehta    |
+| Amit       | Kumar    |
+| Sneha      | Patel    |
+| Vikram     | Joshi    |
+| Pooja      | Rao      |
+| Rahul      | Nair     |
+| Anita      | Desai    |
++------------+----------+
+
 --- Retrieve patients with pending appointments.
 SELECT P.FirstName, P.LastName
 FROM Patients P
 WHERE EXISTS (SELECT 1 FROM Appointments A WHERE A.PatientID = P.PatientID AND A.Status = 'Pending');
 
--- We have covered almost all main topics used in SQL and here  are some question to practice in health System Project 
--- Question: List all patients' names and their contact numbers.
-SELECT FirstName, LastName, ContactNumber
-FROM Patients;
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Neha      | Sharma   |
+| Pooja     | Rao      |
+| Rahul     | Nair     |
+| Anita     | Desai    |
++-----------+----------+
+
 
 --- Question: Find the number of male and female Active patients.
 SELECT Gender, COUNT(*) AS NumberOfPatients
@@ -172,19 +363,40 @@ FROM Patients
 Where Status = 'Active'
 GROUP BY Gender;
 
++--------+------------------+
+| Gender | NumberOfPatients |
++--------+------------------+
+| Male   |                5 |
+| Female |                4 |
++--------+------------------+
+
 --- Question: List all doctors along with their specialties.
 SELECT FirstName, LastName, Specialty
 FROM Doctors;
 
---- Question: Find the number of doctors in each specialty.
-SELECT Specialty, COUNT(*) AS NumberOfDoctors
-FROM Doctors
-GROUP BY Specialty;
++------------+----------+-------------+
+| FirstName  | LastName | Specialty   |
++------------+----------+-------------+
+| Dr. Ravi   | Patel    | Cardiology  |
+| Dr. Sunita | Desai    | Neurology   |
+| Dr. Anil   | Joshi    | Orthopedics |
+| Dr. Meera  | Rao      | Pediatrics  |
+| Dr. Vikram | Kapoor   | Dermatology |
++------------+----------+-------------+
 
 --- Question: List the appointments that are still pending (status 'Pending').
 SELECT *
 FROM Appointments
 WHERE Status = 'Pending';
+
++---------------+-----------+----------+---------------------+---------+
+| AppointmentID | PatientID | DoctorID | AppointmentDate     | Status  |
++---------------+-----------+----------+---------------------+---------+
+|             2 |         2 |        2 | 2024-07-05 11:00:00 | PENDING |
+|             8 |         8 |        2 | 2024-08-11 12:30:00 | Pending |
+|             9 |         9 |        3 | 2024-08-16 09:30:00 | Pending |
+|            10 |        10 |        3 | 2024-08-21 14:30:00 | Pending |
++---------------+-----------+----------+---------------------+---------+
 
 --- Question: Retrieve the details of appointments along with patient and doctor names.
 SELECT A.AppointmentID, P.FirstName AS PatientFirstName, P.LastName AS PatientLastName,
@@ -193,17 +405,56 @@ FROM Appointments A
 JOIN Patients P ON A.PatientID = P.PatientID
 JOIN Doctors D ON A.DoctorID = D.DoctorID;
 
++---------------+------------------+-----------------+-----------------+----------------+---------------------+
+| AppointmentID | PatientFirstName | PatientLastName | DoctorFirstName | DoctorLastName | AppointmentDate     |
++---------------+------------------+-----------------+-----------------+----------------+---------------------+
+|             1 | Arjun            | Verma           | Dr. Ravi        | Patel          | 2024-07-01 10:00:00 |
+|             6 | Sneha            | Patel           | Dr. Ravi        | Patel          | 2024-08-01 10:30:00 |
+|             7 | Vikram           | Joshi           | Dr. Ravi        | Patel          | 2024-08-06 11:30:00 |
+|             2 | Neha             | Sharma          | Dr. Sunita      | Desai          | 2024-07-05 11:00:00 |
+|             8 | Pooja            | Rao             | Dr. Sunita      | Desai          | 2024-08-11 12:30:00 |
+|             3 | Rohan            | Singh           | Dr. Anil        | Joshi          | 2024-07-10 12:00:00 |
+|             9 | Rahul            | Nair            | Dr. Anil        | Joshi          | 2024-08-16 09:30:00 |
+|            10 | Anita            | Desai           | Dr. Anil        | Joshi          | 2024-08-21 14:30:00 |
+|             4 | Priya            | Mehta           | Dr. Meera       | Rao            | 2024-07-15 09:00:00 |
+|             5 | Amit             | Kumar           | Dr. Vikram      | Kapoor         | 2024-07-20 14:00:00 |
++---------------+------------------+-----------------+-----------------+----------------+---------------------+
+
 --- Question: Find the most common diagnosis given by doctors.
 SELECT Diagnosis, COUNT(*) AS Frequency
 FROM MedicalRecords
 GROUP BY Diagnosis
 ORDER BY Frequency DESC;
 
++--------------+-----------+
+| Diagnosis    | Frequency |
++--------------+-----------+
+| Hypertension |         1 |
+| Migraine     |         1 |
+| Fracture     |         1 |
+| Flu          |         1 |
+| Skin Allergy |         1 |
+| Diabetes     |         1 |
+| Epilepsy     |         1 |
++--------------+-----------+
+
 --- Question: Find the medications that have been prescribed the most.
 SELECT Medication, COUNT(*) AS PrescriptionCount
 FROM Prescriptions
 GROUP BY Medication
 ORDER BY PrescriptionCount DESC;
+
++----------------+-------------------+
+| Medication     | PrescriptionCount |
++----------------+-------------------+
+| Amlodipine     |                 1 |
+| Sumatriptan    |                 1 |
+| Ibuprofen      |                 1 |
+| Oseltamivir    |                 1 |
+| Hydrocortisone |                 1 |
+| Metformin      |                 1 |
+| Carbamazepine  |                 1 |
++----------------+-------------------+
 
 --- Question: Retrieve the details of unpaid bills.
 SELECT *
@@ -215,4 +466,14 @@ SELECT Dept.DepartmentName, COUNT(*) AS StaffCount
 FROM HospitalStaff HS
 JOIN Departments Dept ON HS.DepartmentID = Dept.DepartmentID
 GROUP BY Dept.DepartmentName;
+
++----------------+------------+
+| DepartmentName | StaffCount |
++----------------+------------+
+| Cardiology     |          1 |
+| Neurology      |          1 |
+| Orthopedics    |          1 |
+| Pediatrics     |          1 |
+| Dermatology    |          1 |
++----------------+------------+
 
