@@ -1,6 +1,7 @@
 # MYSQL---Health_Care-Project
 
-![Project Logo](images/health_care.png)
+ <img width="652" alt="health_care" src="https://github.com/user-attachments/assets/1a3e8fbc-1c12-4138-88cf-b5e819d05e3a">
+
 
 
 
